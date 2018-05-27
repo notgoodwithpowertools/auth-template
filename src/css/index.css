@@ -1,0 +1,112 @@
+@font-face {
+  font-family: Ubuntu;
+  src: local(Ubuntu), url(../fonts/ubuntu/Ubuntu-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: local('Open Sans'), url(../fonts/opensans/OpenSans-Regular.ttf) format('truetype');
+}
+h1 {
+  font-family: 'Open Sans';
+  /*font-family: Ubuntu;*/
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /*font-family: Ubuntu;*/
+  font-family: 'Open Sans';
+  /*background-image: url('/images/mcg5dark.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin-bottom: 5px;*/
+}
+
+/*body.content {*/
+    /*max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 10px;*/
+/*}*/
+
+.landing {
+  font-family: Ubuntu, Arial, serif;
+  background-image: url('/images/mcg5dark.jpg');
+  /*border: 2px dashed red;*/
+  /*height: 100%;*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*border: 2px dashed red;*/
+  height: 100vh;
+  margin-bottom: 5px;
+  /*padding: 0;*/
+  /*height: auto;*/
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+}
+
+.landing p {
+  color: red;
+}
+
+.blur {
+  background-image: url('/images/mcg5darkblur.jpg');
+}
+
+.page1 {
+  display:flex;
+  justify-content: center;
+  /*align-content: stretch;*/
+  /*height: 100vh;*/
+  /*background-color: black;*/
+  background-image: url('/images/mcg5darkblur.jpg');
+  /*flex-direction: column;*/
+  height: 100%;
+  /*
+  max-width: 1000px;
+  margin: auto;
+  background: white;
+  padding: 10px;*/
+  /*height: 100vw;*/
+
+  height: 100vh;
+  margin-bottom: 5px;
+  /*padding: 0;*/
+  /*height: auto;*/
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.content {
+  display: flex;
+
+  max-width: 1000px;
+  height: 100%;
+  background: white;
+  flex-direction: column;
+  background-size: cover;
+
+}
+
+.contentItem {
+  /*margin: 5px;*/
+  /*padding: 10px;*/
+  /*flex-basis: 500px;*/
+  padding-left: 10px;
+  padding-right: 10px
+
+}
+
+@media (max-width: 700) {
+  .contentItem {
+    padding: 2px;
+
+  }
+}

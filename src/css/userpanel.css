@@ -1,0 +1,19 @@
+.userpanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /*background-color: green;*/
+
+}
+
+h3.userpanel {
+  color: blue;
+}
+
+input {
+  /*background-color: yellow;*/
+  border-style: solid;
+  border-color: #00275E;;
+  border-width: medium;
+}

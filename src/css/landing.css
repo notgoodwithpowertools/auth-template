@@ -1,0 +1,130 @@
+
+
+/*.lpHeadingPanel {
+
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}*/
+
+.lpButtonsPanel {
+  /*background: linear-gradient(to bottom, #FFFFFF 0, #FFFFFF 2%, #3f4b0a 100%) repeat scroll 0 0 transparent;*/
+  /*background: linear-gradient(to bottom, #FFFFFF , #FFFFFF 2%, #3f4b0a 100%) repeat scroll 0 0 transparent;*/
+  /*background: rgba(204,204,900, 0.5);*/
+  background: rgba(0,0,50, 0.5);
+  /*background: hsla(204,204,900, 0.5);*/
+  /*background-color: red;*/
+  padding: 20px;
+  /*opacity: 0.5;*/
+  /*flex: 1;*/
+  min-width: 250px;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.loginPanel {
+  background: rgba(0,0,50, 0.5);
+  /*background: hsla(204,204,900, 0.5);*/
+  /*background-color: red;*/
+  padding: 25px;
+  /*opacity: 0.5;*/
+  /*flex: 1;*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  padding-bottom: 100px;
+  margin-top: 25px;
+}
+
+.loginPanel h1 {
+  color: white;
+}
+
+.loginInput {
+  padding: 5px;
+  margin: 5px;
+  font-family: 'Open Sans'
+}
+.lpLink {
+  /*text-decoration: none;*/
+  color: white;
+  padding-top: 5px;
+}
+
+.button1 {
+    font-family: Ubuntu;
+    font-size: 2vw;
+    background: none;
+    color: black;
+    border: 2px solid black;
+    border-radius: 4px;
+    /*border: none;*/
+    /*flex: 1;*/
+    width: 40%;
+    padding: 10px;
+    text-decoration: none;
+    text-align: center;
+    display:block;
+    /*margin-bottom: 20px*/
+    /*background-color: transparent;*/
+}
+
+.button2 {
+  /*background: linear-gradient(to bottom, #FFFFFF 0%, #adc4e5 25%, #2e2e2e 100%);*/
+  background: linear-gradient(to bottom, #FFFFFF 0%, #adc4e5 25%, #bf3528 100%);
+  /*border: 1px solid #FAB149;*/
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  /*-webkit-box-shadow: 0 1px 2px #999999;
+  -ms-box-shadow: 0 1px 2px #999999;
+  box-shadow: 0 1px 2px #999999;*/
+  color: #FFFFFF;
+  cursor: pointer;
+  /*font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;*/
+  font-family: 'Open Sans';
+  font-size: 13px;
+  font-weight: bold;
+  /*-ms-text-shadow: 0 -1px #099FDF;*/
+  /*text-shadow: 0 -1px #099FDF;*/
+  margin: 4px;
+  width: 85px;
+  vertical-align: central;
+  align-items: center;
+  text-decoration: none;
+  /*font: Ubuntu;*/
+  /*font: 'Open Sans';*/
+  /*display: inline-block;*/
+
+  text-align: center;
+  padding: 6px 0;
+}
+
+.link {
+  border: none;
+}
+
+
+@media (max-width: 400px) {
+  .lpButtonsPanel {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 180px;
+  }
+  .button1 {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .button2 {
+    width: 100%;
+  }
+  .lpHeading {
+    /*font-size: 6vw;*/
+    font-size: 7vw;
+    color: #bf3528;
+  }
+}
