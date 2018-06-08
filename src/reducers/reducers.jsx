@@ -4,7 +4,7 @@ export var authReducer = (state = '', action) => {
 
   switch (action.type) {
     case 'LOGIN':
-      console.log("Logging in user...");
+      console.log("Authreducer: Logging in user...");
       return {
         uid: action.uid
       }
@@ -189,7 +189,7 @@ export var seasonReducer = (state = 2018, action) => {
     default:
       return state;
   }
-  
+
 };
 
 // export var addGameReducer = (state = '', action) => {

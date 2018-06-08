@@ -42,7 +42,7 @@ body {
   align-items: center;
   /*border: 2px dashed red;*/
   height: 100vh;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   /*padding: 0;*/
   /*height: auto;*/
   background-size: cover;
@@ -51,9 +51,9 @@ body {
 
 }
 
-.landing p {
+/* .landing p {
   color: red;
-}
+} */
 
 .blur {
   background-image: url('/images/mcg5darkblur.jpg');

@@ -1,4 +1,4 @@
-import firebase, { firebaseRef, githubProvider} from '../api/firebase/index.js';
+import firebase, { firebaseRef, githubProvider, facebookProvider} from '../api/firebase/index.js';
 import { setMsg } from './msg-actions';
 // export var login = (uid) => {
 //   return {
@@ -15,6 +15,12 @@ export var setMsg = (msg) => {
   };
 };
 */
+
+var defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-prod.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=1737256f-e52d-46de-a754-d64b7168ed96';
+if (process.env.NODE_ENV === 'development') {
+  defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-dev.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=c534d444-e8c5-4738-838e-2b9275090878';
+};
+
 export var login = (uid) => {
   // console.log("login action...");
   return {
@@ -50,6 +56,13 @@ export var addUser = (user) => {
 //   };
 // };
 
+export var setLoginType = (loginType) => {
+  return {
+    type: 'SET_LOGIN_TYPE',
+    loginType: loginType
+  }
+};
+
 export var setUserImgDB = (user, url) => {
   console.log("setUserImgDB...User ID:", user.uid + " URL:", url);
   firebaseRef.child(`/users/${user.uid}/info/imageURL`).set(url)
@@ -59,17 +72,106 @@ export var setUserImgDB = (user, url) => {
 }
 
 
-export var startAddUser2 = () => {
-  console.log('startAddUser2...');
+// export var startAddUser2 = () => {
+//   console.log('startAddUser2...');
+//   return (dispatch, getState) => {
+//     var uid = getState().auth.uid;
+//     var userRef = firebaseRef.child(`users/${uid}/info`);
+//     console.log("userRef:", userRef);
+//     userRef.on('value', snap => {
+//       console.log("SNAP:", snap.val());
+//       dispatch(addUser(snap.val()));
+//
+//     });
+//   };
+// };
 
+
+export var startAddUser3 = (user) => {
+  console.log('startAddUser3...');
+  console.log('User:', user);
   return (dispatch, getState) => {
+    console.log("loginType:", localStorage.getItem('loginType'));
     var uid = getState().auth.uid;
-    var userRef = firebaseRef.child(`users/${uid}/info`);
-    userRef.on('value', snap => {
-      // console.log("SNAP:", snap.val());
-      dispatch(addUser(snap.val()));
+    var userUidRef = firebaseRef.child(`users/${uid}`);
 
-    });
+    if (localStorage.getItem('loginType') === 'email') {
+      console.log("Setting up email user info...");
+      var userRef = firebaseRef.child(`users/${uid}/info`);
+      console.log("userRef:", userRef);
+      userRef.on('value', snap => {
+        console.log("SNAP:", snap.val());
+        dispatch(addUser(snap.val()));
+
+      });
+    }
+    if (localStorage.getItem('loginType') === 'github') {
+      console.log("Setting up Github user info...");
+      // console.log("Checking User rego ... ", checkUserRegistration(uid));
+      // var userUidRef = firebaseRef.child(`users/${uid}`);
+      // var check = false;
+      let aUser = {};
+      aUser.uid = user.uid;
+      aUser.firstname = (user.displayName === null) ? user.uid.substr(0, 8) : user.displayName;
+      aUser.email = (user.providerData[0].email === null) ? 'Not provided' : user.providerData[0].email;
+      aUser.imageURL = (user.photoURL === null) ? defURL : user.photoURL;
+      // console.log("aUser:", aUser);
+      dispatch(addUser(aUser));
+      userUidRef.once('value', function(snapshot) {
+        // The callback succeeded; do something with the final result.
+        if (!snapshot.exists()) {
+          // check = true;
+          console.log("User is NOT registered. Creating user in DB..");
+          // console.log("SNAPSHOT:",  snapshot);
+          saveUser(aUser, aUser.firstname);
+
+        }
+        // else {
+        //   check = false;
+        //   console.log("User is NOT registered...");
+        //
+        // }
+        //
+      }, function(error) {
+        // The callback failed.
+        console.log(error);
+      });
+
+    } //end -- if (localStorage.getItem('loginType') === 'github') {
+
+    if (localStorage.getItem('loginType') === 'facebook') {
+      console.log("Setting up Facebook user info...");
+      // console.log("Checking User rego ... ", checkUserRegistration(uid));
+      // var userUidRef = firebaseRef.child(`users/${uid}`);
+      // var check = false;
+      let aUser = {};
+      aUser.uid = user.uid;
+      aUser.firstname = (user.displayName === null) ? user.uid.substr(0, 8) : user.displayName;
+      aUser.email = (user.providerData[0].email === null) ? 'Not provided' : user.providerData[0].email;
+      aUser.imageURL = (user.photoURL === null) ? defURL : user.photoURL;
+      // console.log("aUser:", aUser);
+      dispatch(addUser(aUser));
+      userUidRef.once('value', function(snapshot) {
+        // The callback succeeded; do something with the final result.
+        if (!snapshot.exists()) {
+          // check = true;
+          console.log("User is NOT registered. Creating user in DB..");
+          // console.log("SNAPSHOT:",  snapshot);
+          saveUser(aUser, aUser.firstname);
+        }
+        // else {
+        //   check = false;
+        //   console.log("User is NOT registered...");
+        //
+        // }
+        //
+      }, function(error) {
+        // The callback failed.
+        console.log(error);
+      });
+
+    } //end -- if (localStorage.getItem('loginType') === 'facebook') {
+
   };
 };
 
@@ -100,12 +202,36 @@ export var startLogout = () => {
   };
 };
 
+export var startFacebookLogin = () => {
+  return (dispatch, getState) => {
+    firebase.auth().signInWithPopup(facebookProvider).then((result) => {
+    // firebase.auth().signInWithRedirect(facebookProvider).then((result) => {
+      console.log("Facebook Auth worked...", result);
+      // getGitHubUserInfo(result.user);
+      dispatch(setMsg("Authorised with Facebook..."))
+      // setTimeout(() => {
+      //   dispatch(setMsg("Authorised with Facebook..."))
+      // }, 3000)
+    }, (error) => {
+      console.log("Unable to authorise with Facebook", error);
+      dispatch(setMsg(error.message))
+    });
+  };
+};
+
 export var startGitHubLogin = () => {
   return (dispatch, getState) => {
-    firebase.auth().signInWithPopup(githubProvider).then((result) => {
+    // firebase.auth().signInWithPopup(githubProvider).then((result) => {
+    firebase.auth().signInWithRedirect(githubProvider).then((result) => {
       console.log("Auth worked...", result);
+      // getGitHubUserInfo(result.user);
+
+      setTimeout(() => {
+        dispatch(setMsg("Authorised with Github..."))
+      }, 3000)
     }, (error) => {
       console.log("Unable to auth", error);
+      dispatch(setMsg(error.message))
     });
   };
 };
@@ -122,7 +248,8 @@ export var startEmailLogin = (email = "aqwerty543@gmail.com", password = "wally1
     //firebase.auth().signInWithPopup(githubProvider).then((result) => {
       console.log("Auth worked...", result);
 
-      startAddUser2();
+      // startAddUser2(result.uid);
+      // startAddUser3();
     }, (error) => {
       // console.log("Unable to auth", error.message);
       console.log("Auth error:", error);
@@ -132,6 +259,30 @@ export var startEmailLogin = (email = "aqwerty543@gmail.com", password = "wally1
     });
   };
 };
+
+/*
+export var checkUserRegistration = (uid) => {
+  console.log("checkUserRegistration: Checking user registration...");
+  // firebaseRef.child(`users/${user.uid}`
+  var userRef = firebaseRef.child(`users/${uid}`);
+  // userRef.once('value', function(snapshot) {
+  //   if (snapshot.hasChild(uid)) {
+  //     console.log('User is defined');
+  //     return true;
+  //   }
+  //   else {
+  //     console.log('User is NOT already defined');
+  //     return true;
+  //   }
+  // });
+  // var check;
+  return userRef.once("value").then((snapshot) => {
+    return snapshot.exists();
+    // console.log("Check:", check);
+    // return exists;
+  });
+}
+*/
 
 // Not used - manually add user to leaderboard
 export var addUserToLeaderBoard = (user, firstname, imageURL) => {
@@ -168,10 +319,10 @@ export function saveUser (user, firstname) {
   console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
   // var defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-dev.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=c534d444-e8c5-4738-838e-2b9275090878';
-  var defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-prod.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=1737256f-e52d-46de-a754-d64b7168ed96';
-  if (process.env.NODE_ENV === 'development') {
-    defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-dev.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=c534d444-e8c5-4738-838e-2b9275090878';
-  }
+  // var defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-prod.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=1737256f-e52d-46de-a754-d64b7168ed96';
+  // if (process.env.NODE_ENV === 'development') {
+  //   defURL = 'https://firebasestorage.googleapis.com/v0/b/footytips-dev.appspot.com/o/userimages%2Fdefault.jpg?alt=media&token=c534d444-e8c5-4738-838e-2b9275090878';
+  // }
 
   return firebaseRef.child(`users/${user.uid}/info`)
     .set({
@@ -181,6 +332,7 @@ export function saveUser (user, firstname) {
       imageURL: defURL
     })
     .then(() => {
+      // Functions after registration
       addUserToLeaderBoard(user, firstname, defURL)
     })
     .then(() => user)
@@ -224,4 +376,43 @@ export var monitorRole = (uid) => {
       dispatch(setUserAdmin(isAdmin));
     });
   }
+};
+
+// export var monitorUserInfo = () => {
+//   console.log('monitorUserInfo...');
+//   return (dispatch, getState) => {
+//     var uid = getState().auth.uid;
+//     // var user = getState().user;
+//     var userRef = firebaseRef.child(`users/${uid}/info`);
+//     // if (user !== null) {
+//       userRef.on('value', snap => {
+//         console.log("SNAP:", snap.val());
+//         dispatch(addUser(snap.val()));
+//       });
+//     // };
+//   };
+// };
+
+
+
+export var getGitHubUserInfo = (aUser) => {
+
+  console.log('getGitHubUserInfo... using aUser:', aUser);
+
+
+  return (dispatch, getState) => {
+
+    console.log('getGitHubUserInfo... using aUser:', aUser);
+    var user = aUser;
+    console.log('getGitHubUsgdsdgdsgdshshsdsdderInfo... using user:', user);
+    user.firstname = user.displayName;
+    user.imageURL = user.photoURL;
+    if (user.displayName === null) {
+      user.firstname = user.email;
+    };
+
+    console.log("User info from GitHub - id:", user.uid +", Email:", user.email + ", Name:", user.displayName + " PhotoURL:,", user.photoURL);
+
+    dispatch(addUser(user));
+  };
 };

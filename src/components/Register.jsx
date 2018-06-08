@@ -17,7 +17,7 @@ export class Register extends React.Component {
   constructor (props) {
     super(props);
     this.register = this.register.bind(this);
-    this.handleTextInfo = this.handleTextInfo.bind(this);
+    this.clearMsgTxt = this.clearMsgTxt.bind(this);
   }
 
   register (e) {
@@ -34,7 +34,7 @@ export class Register extends React.Component {
     dispatch(authActions.registerUser(emailTxt, passwordTxt, firstname));
   }
 
-  handleTextInfo (e) {
+  clearMsgTxt (e) {
     e.preventDefault();
     var {dispatch} = this.props;
     dispatch(msgActions.setMsg(""));
@@ -49,10 +49,10 @@ export class Register extends React.Component {
     return (
       <div className='landing blur'>
 
-        <h1 className="lpHeading">Register</h1>
           <div className="loginPanel">
-            <input className="loginInput" type="email" ref="userid" placeholder="Enter email id..." onChange={this.handleTextInfo}/>
-            <input className="loginInput" type="password" ref="password" placeholder="Enter password..." onChange={this.handleTextInfo}/>
+            <h1 className="lpHeading">Register</h1>
+            <input className="loginInput" type="email" ref="userid" placeholder="Enter email id..." onChange={this.clearMsgTxt}/>
+            <input className="loginInput" type="password" ref="password" placeholder="Enter password..." onChange={this.clearMsgTxt}/>
             <input className="loginInput" type="text" ref="firstname" placeholder="Enter name..." />
             <button className="button2" onClick={this.register}>Register</button>
             <Link className="lpLink" to='/login'>Back to Login</Link>

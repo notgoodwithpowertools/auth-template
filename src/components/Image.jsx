@@ -15,7 +15,7 @@ export default class Image extends Component {
     };
 
     if (cssClass !== undefined) {
-      defaults = { }  
+      defaults = { }
     }
 
     // src = imageName;
